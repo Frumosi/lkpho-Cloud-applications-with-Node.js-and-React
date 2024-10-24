@@ -1,22 +1,29 @@
- // Import the HTTP module
 const http = require('http');
 
-// Import the 'today' module
-const today = require('./today');
+// Function to determine the greeting based on the current hour
+function getGreeting() {
+    const currentHour = new Date().getHours();
 
-// Define the request listener function
-const requestListener = function (req, res) {
-    res.writeHead(200); // Set the status code to 200 (OK)
-    // Send the response with the current date from the 'today' module
-    res.end(`Hello, World! The date today is ${today.getDate()}`);
-};
+    if (currentHour < 12) {
+        return "Good morning!";
+    } else if (currentHour < 18) {
+        return "Good afternoon!";
+    } else {
+        return "Good evening!";
+    }
+}
 
-// Define the port number
-const port = 8080;
+// Create an HTTP server
+http.createServer((req, res) => {
+    // Set the response HTTP header with HTTP status and content type
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
 
-// Create an HTTP server using the request listener function
-const server = http.createServer(requestListener);
+    // Get the dynamic greeting
+    const greeting = getGreeting();
 
-// Start the server and listen on the specified port
-server.listen(port);
-console.log('Server listening on port: ' + port);
+    // Send the response body with the dynamic greeting
+    res.end(greeting + ' Welcome to our service!\n');
+
+}).listen(8080); // Server listens on port 8080
+
+console.log('Server running at http://localhost:8080/');
