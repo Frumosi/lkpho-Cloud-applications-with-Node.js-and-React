@@ -7,6 +7,12 @@ const app = new express();
 // Initialize an array to store login details
 let loginDetails = [];
 
+// List of months
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
 // Define the root route to send a welcome message
 app.get("/", (req, res) => {
     res.send("Welcome to the express server");
@@ -27,6 +33,21 @@ app.post("/login/:name", (req, res) => {
 app.get("/:name", (req, res) => {
     res.send("Hello " + req.params.name);
 });
+
+
+// Endpoint to fetch a month by number
+app.get('/fetchMonth/:num', (req, res) => {
+    const num = parseInt(req.params.num);
+  
+    // Check if the number is valid
+    if (isNaN(num) || num < 1 || num > 12) {
+      return res.status(400).json({ error: "Invalid number. Please enter a number between 1 and 12." });
+    }
+  
+    // Return the month
+    res.json({ month: months[num - 1] });
+  });
+
 
 // Start the server and listen on port 3333
 app.listen(3333, () => {
